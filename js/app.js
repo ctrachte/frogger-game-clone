@@ -1,3 +1,53 @@
+// Win or lose Modal, based on an example from https://www.w3schools.com/howto/howto_css_modals.asp
+
+// Get the modal
+var winModal = document.getElementById('winModal');
+var loseModal = document.getElementById('loseModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    winModal.style.display = "none";
+    loseModal.style.display = "none";
+    window.location.reload();
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == winModal || event.target == loseModal) {
+      winModal.style.display = "none";
+      loseModal.style.display = "none";
+      window.location.reload();
+    }
+}
+
+// Score board class
+class Scoreboard {
+  constructor(score, lives) {
+      // Variables applied to each of our instances go here,
+      this.score = score;
+      this.lives = lives;
+  }
+  render () {
+    ctx.font = '48px Helvetica';
+    ctx.fillStyle = 'white';
+    ctx.fillText(`Lives: ${this.lives}`, 10, 110);
+    ctx.fillText(`Score: ${this.score}`, 315, 110);
+    if (this.lives === 0) {
+      loseModal.style.display = "block";
+      document.removeEventListener('keyup', keyPressHandler);
+    } else if (this.score === 9) {
+      document.removeEventListener('keyup', keyPressHandler);
+      winModal.style.display = "block";
+    }
+  }
+}
+
 // Enemy Class
 class Enemy {
     constructor(x, y, speed) {
@@ -23,7 +73,7 @@ class Enemy {
         // when off canvas, reset position of enemy to move across again
         if (this.x > 550) {
             this.x = -100;
-            this.speed = Math.floor(Math.random() * 700);
+            this.speed = 100 + Math.floor(Math.random() * 700);
         }
 
         // Check for collision between player and enemies
@@ -33,6 +83,7 @@ class Enemy {
             30 + player.y > this.y) {
             player.x = 200;
             player.y = 380;
+            scoreBoard.lives--;
         }
     }
 
@@ -69,6 +120,7 @@ class Player {
         if (this.y < 0) {
             this.x = 200;
             this.y = 380;
+            scoreBoard.score++;
         }
     }
 
@@ -101,7 +153,9 @@ var allEnemies = [];
 var enemyPosition = [60, 140, 220];
 var player = new Player(200, 380, 50);
 var enemy;
-var rock;
+var score = 0;
+var lives = 3;
+var scoreBoard = new Scoreboard (score, lives);
 
 enemyPosition.forEach(function(posY) {
     enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 700));
@@ -110,7 +164,8 @@ enemyPosition.forEach(function(posY) {
 
 // This listens for key presses and sends the keys to your
 // Player.keyPress() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+
+function keyPressHandler (e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
@@ -119,4 +174,6 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.keyPress(allowedKeys[e.keyCode]);
-});
+}
+
+document.addEventListener('keyup', keyPressHandler);
