@@ -1,5 +1,4 @@
 // Win or lose Modal, based on an example from https://www.w3schools.com/howto/howto_css_modals.asp
-
 // Get the modals
 let winModal = document.getElementById('winModal');
 let loseModal = document.getElementById('loseModal');
@@ -17,40 +16,40 @@ span.onclick = function() {
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == winModal || event.target == loseModal) {
-      winModal.style.display = "none";
-      loseModal.style.display = "none";
-      scoreBoard.reset(); // and reset the board
+        winModal.style.display = "none";
+        loseModal.style.display = "none";
+        scoreBoard.reset(); // and reset the board
     }
 }
 
 // Score board class
 class Scoreboard {
-  constructor(score, lives) {
-      // Variables applied to each of our instances go here,
-      this.score = score;
-      this.lives = lives;
-  }
-  // Draws the scoreboard on the canvas
-  render () {
-    ctx.font = '48px Helvetica'; // font style
-    ctx.fillStyle = 'white'; // font color
-    ctx.fillText(`Lives: ${this.lives}`, 10, 110); // lives position
-    ctx.fillText(`Score: ${this.score}`, 315, 110); // score position
-    //check if player has won or lost, pop up modal and disable controls if so
-    if (this.lives === 0) {
-      loseModal.style.display = "block";
-      document.removeEventListener('keyup', keyPressHandler);
-    } else if (this.score === 9) {
-      document.removeEventListener('keyup', keyPressHandler);
-      winModal.style.display = "block";
+    constructor(score, lives) {
+        // Variables applied to each of our instances go here,
+        this.score = score;
+        this.lives = lives;
     }
-  }
-  // resets the scoreboard and keyPressHandler
-  reset () {
-    this.lives =  3;
-    this.score = 0;
-    document.addEventListener('keyup', keyPressHandler);
-  }
+    // Draws the scoreboard on the canvas
+    render() {
+        ctx.font = '48px Helvetica'; // font style
+        ctx.fillStyle = 'white'; // font color
+        ctx.fillText(`Lives: ${this.lives}`, 10, 110); // lives position
+        ctx.fillText(`Score: ${this.score}`, 315, 110); // score position
+        //check if player has won or lost, pop up modal and disable controls if so
+        if (this.lives === 0) {
+            loseModal.style.display = "block";
+            document.removeEventListener('keyup', keyPressHandler);
+        } else if (this.score === 9) {
+            document.removeEventListener('keyup', keyPressHandler);
+            winModal.style.display = "block";
+        }
+    }
+    // resets the scoreboard and keyPressHandler
+    reset() {
+        this.lives = 3;
+        this.score = 0;
+        document.addEventListener('keyup', keyPressHandler);
+    }
 }
 
 // Enemy Class
@@ -160,7 +159,7 @@ let player = new Player(200, 380, 50);
 let enemy;
 let score = 0;
 let lives = 3;
-let scoreBoard = new Scoreboard (score, lives);
+let scoreBoard = new Scoreboard(score, lives);
 
 enemyPosition.forEach(function(posY) {
     enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 650));
@@ -171,7 +170,7 @@ enemyPosition.forEach(function(posY) {
 // Player.keyPress() method. You don't need to modify this... HOWEVER
 // I abstracted this listener function so we can call it elsewhere
 
-function keyPressHandler (e) {
+function keyPressHandler(e) {
     let allowedKeys = {
         37: 'left',
         38: 'up',
