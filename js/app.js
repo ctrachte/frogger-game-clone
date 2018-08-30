@@ -93,35 +93,6 @@ class Player {
         }
     }
 }
-class Rock extends Enemy {
-  constructor(x, y, speed) {
-    super(x, y, speed);
-    this.sprite = 'images/Rock.png';
-  }
-  update(dt) {
-      this.x += this.speed * dt;
-
-      if (this.x > 550) {
-          this.x = -100;
-          this.speed = 100;
-      }
-
-      if (player.x === this.x && player.y === this.y) {
-        console.log( player.x, this.x);
-        player.x += 50;
-      }
-      if (player.x + 37 === this.x && player.y === this.y) {
-        player.x -= 50;
-      }
-      if (player.y === this.y + 25 && player.x === this.x) {
-        player.y += 30;
-      }
-      if (30 + player.y === this.y && player.x === this.x) {
-        player.y -= 30;
-      }
-  }
-}
-
 
 // Now instantiate all objects.
 
@@ -133,10 +104,8 @@ var enemy;
 var rock;
 
 enemyPosition.forEach(function(posY) {
-    // enemy = new Enemy(0, posY, 80 + Math.floor(Math.random() * 500));
-    // allEnemies.push(enemy);
-    rock = new Rock(0, posY, 100);
-    allEnemies.push(rock);
+    enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 700));
+    allEnemies.push(enemy);
 });
 
 // This listens for key presses and sends the keys to your
