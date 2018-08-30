@@ -1,20 +1,17 @@
 // Win or lose Modal, based on an example from https://www.w3schools.com/howto/howto_css_modals.asp
 
-// Get the modal
-var winModal = document.getElementById('winModal');
-var loseModal = document.getElementById('loseModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+// Get the modals
+let winModal = document.getElementById('winModal');
+let loseModal = document.getElementById('loseModal');
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+let span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     winModal.style.display = "none";
     loseModal.style.display = "none";
-    window.location.reload();
+    scoreBoard.reset(); // and reset the board
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -22,7 +19,7 @@ window.onclick = function(event) {
     if (event.target == winModal || event.target == loseModal) {
       winModal.style.display = "none";
       loseModal.style.display = "none";
-      window.location.reload();
+      scoreBoard.reset(); // and reset the board
     }
 }
 
@@ -33,11 +30,13 @@ class Scoreboard {
       this.score = score;
       this.lives = lives;
   }
+  // Draws the scoreboard on the canvas
   render () {
-    ctx.font = '48px Helvetica';
-    ctx.fillStyle = 'white';
-    ctx.fillText(`Lives: ${this.lives}`, 10, 110);
-    ctx.fillText(`Score: ${this.score}`, 315, 110);
+    ctx.font = '48px Helvetica'; // font style
+    ctx.fillStyle = 'white'; // font color
+    ctx.fillText(`Lives: ${this.lives}`, 10, 110); // lives position
+    ctx.fillText(`Score: ${this.score}`, 315, 110); // score position
+    //check if player has won or lost, pop up modal and disable controls if so
     if (this.lives === 0) {
       loseModal.style.display = "block";
       document.removeEventListener('keyup', keyPressHandler);
@@ -45,6 +44,12 @@ class Scoreboard {
       document.removeEventListener('keyup', keyPressHandler);
       winModal.style.display = "block";
     }
+  }
+  // resets the scoreboard and keyPressHandler
+  reset () {
+    this.lives =  3;
+    this.score = 0;
+    document.addEventListener('keyup', keyPressHandler);
   }
 }
 
@@ -73,7 +78,7 @@ class Enemy {
         // when off canvas, reset position of enemy to move across again
         if (this.x > 550) {
             this.x = -100;
-            this.speed = 100 + Math.floor(Math.random() * 700);
+            this.speed = 100 + Math.floor(Math.random() * 650);
         }
 
         // Check for collision between player and enemies
@@ -116,7 +121,7 @@ class Player {
             this.x = 0;
         }
 
-        // Check for player reaching top of canvas and winning the game
+        // Check for player reaching top of canvas and winning points
         if (this.y < 0) {
             this.x = 200;
             this.y = 380;
@@ -146,27 +151,28 @@ class Player {
     }
 }
 
-// Now instantiate all objects.
+//  Instantiate all Variables.
 
-var allEnemies = [];
+let allEnemies = [];
 
-var enemyPosition = [60, 140, 220];
-var player = new Player(200, 380, 50);
-var enemy;
-var score = 0;
-var lives = 3;
-var scoreBoard = new Scoreboard (score, lives);
+let enemyPosition = [60, 140, 220];
+let player = new Player(200, 380, 50);
+let enemy;
+let score = 0;
+let lives = 3;
+let scoreBoard = new Scoreboard (score, lives);
 
 enemyPosition.forEach(function(posY) {
-    enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 700));
+    enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 650));
     allEnemies.push(enemy);
 });
 
 // This listens for key presses and sends the keys to your
-// Player.keyPress() method. You don't need to modify this.
+// Player.keyPress() method. You don't need to modify this... HOWEVER
+// I abstracted this listener function so we can call it elsewhere
 
 function keyPressHandler (e) {
-    var allowedKeys = {
+    let allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
