@@ -1,11 +1,9 @@
 # Arcade Game "Frogger" Clone
-===============================
 ## Getting started
  - Download the zip or clone this repository
  - Go to the directory you downloaded/cloned to
  - Open `Index.html` in your browser.
  That's it! Enjoy!
-===============================
 ## Sources used:
 In case you want to create your own!
 [Udacity's game engine and assets](https://github.com/udacity/frontend-nanodegree-arcade-game)
